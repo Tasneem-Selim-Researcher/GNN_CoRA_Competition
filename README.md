@@ -57,19 +57,27 @@ starter_code/
 ├── requirements.txt
 ```
 
-⚠️ **Test labels are NOT provided**.
+
+### Public Files:
+the dataset is hosted externally on **Google Drive**.
+
+### 🔗 **Download Link**
+➡️ [Click here to access the dataset](
+### Public Files:
+the dataset is hosted externally on **Google Drive**.
+
+### 🔗 **Download Link**
+➡️ [Click here to access the Adjacency Matrix](https://drive.google.com/drive/folders/1xyPHM1E1YMBFJ6pc0jg4brhvNi_vUcCJ?usp=sharing)
+➡️ [Click here to access the Train and Validation data](https://drive.google.com/file/d/1ruYD0JdX_yGv1of_EUM9lcv0t6lmZ3tX/view?usp=sharing)
+
+### Private Files:
+- Test_data → Hidden ground-truth data used for automatic evaluation  
 
 ---
-
+)
 ## 🚀 Getting Started
 
-### 1️⃣ Install Requirements
-
-```bash
-pip install -r requirements.txt
-```
-
-### 2️⃣ Run the Starter Code
+### Run the Starter Code
 
 ```bash
 python gcn_starter.py
@@ -139,12 +147,34 @@ Participants are encouraged to improve upon this baseline using:
 
 ---
 
+## 🕐 Submission Limits
+
+- Each Team should name the file something like: **Team1**.
+- Only the **latest submission** counts toward the leaderboard.
+
+---
+
+## 🧾 Leaderboard
+
+- Leaderboard scores are automatically updated based on accuracy.
+- In case of identical scores, the earlier submission time will be used as a tiebreaker.
+
+---
+
 ## 🎓 Academic Integrity
 
 This competition is intended for **educational and research purposes**.
 
 * Plagiarism is not allowed
 * External pretrained models using Cora labels are prohibited
+
+---
+
+## 📩 Contact
+
+If you face issues with the repository or evaluation: 
+- Contact me at tasneem.mselim@gmail.com 
+
 
 ---
 
