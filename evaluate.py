@@ -20,7 +20,7 @@ labels = pd.read_csv(labels_csv)
 
 # Merge and compute accuracy
 merged = pd.merge(labels, submission, on="id")
-acc = accuracy_score(merged["emotion"], merged["predicted_label"])
+acc = accuracy_score(merged["target"], merged["target"])
 print(f"Accuracy for {team_name}: {acc*100:.2f}%")
 
 # Update single leaderboard CSV
