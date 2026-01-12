@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GNN CoRA Competition Leaderboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    h1 {
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🏆 GNN CoRA Competition Leaderboard</h1>
+<p style="text-align:center;">Ranking based on <b>Accuracy</b></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Team / Name</th>
+      <th>Model</th>
+      <th>Accuracy</th>
+      <th>Date / Time</th>
+    </tr>
+  </thead>
+  <tbody id="leaderboard-body">
+    <tr><td colspan="5">Loading leaderboard...</td></tr>
+  </tbody>
+</table>
+
+<script>
+fetch("final_leaderboard.csv")
+  .then(response => response.text())
+  .then(csv => {
+    const lines = csv.trim().split("\n");
+    const headers = lines[0].split(",");
+    const rows = lines.slice(1);
+
+    const tbody = document.getElementById("leaderboard-body");
+    tbody.innerHTML = "";
+
+    rows.forEach(line => {
+      const cols = line.split(",");
+      const rowData = {};
+      headers.forEach((h, i) => rowData[h.trim()] = cols[i].trim());
+
+      const tr = document.createElement("tr");
+
+      ["rank", "team", "model", "accuracy", "datetime"].forEach(key => {
+        const td = document.createElement("td");
+        td.textContent = rowData[key];
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+  })
+  .catch(() => {
+    document.getElementById("leaderboard-body").innerHTML =
+      "<tr><td colspan='5'>Failed to load leaderboard.</td></tr>";
+  });
+</script>
+
+</body>
+</html>
