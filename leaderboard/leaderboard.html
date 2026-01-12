@@ -42,7 +42,6 @@
     <tr>
       <th>Rank</th>
       <th>Team / Name</th>
-      <th>Model</th>
       <th>Accuracy</th>
       <th>Date / Time</th>
     </tr>
@@ -70,7 +69,7 @@ fetch("final_leaderboard.csv")
 
       const tr = document.createElement("tr");
 
-      ["rank", "team", "model", "accuracy", "datetime"].forEach(key => {
+      ["rank", "team", "accuracy", "datetime"].forEach(key => {
         const td = document.createElement("td");
         td.textContent = rowData[key];
         tr.appendChild(td);
