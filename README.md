@@ -184,26 +184,26 @@ This competition is intended for **educational and research purposes**.
 * Plagiarism is not allowed
 * External pretrained models using Cora labels are prohibited
 
----
-
-## 📩 Contact
-
-If you face issues with the repository or evaluation: 
-- Contact me at tasneem.mselim@gmail.com 
-
 
 ---
 
 ## 📚 References
 
 * Kipf, T. N., & Welling, M. (2017). *Semi-Supervised Classification with Graph Convolutional Networks*. ICLR.
+  
+- **GNNs Tutorials (YouTube) – BASIRA Lab**:  
+  https://www.youtube.com/@BASIRALab
 
+- **GNN Tutorials (GitHub) – BASIRA Lab**:  
+  https://github.com/basiralab
 ---
 
 ## 👩‍💻 Organizer
 
 **Tasneem Selim**
 Teaching Assistant & Researcher in Computer Vision and Graph Machine Learning
+If you face issues with the repository or evaluation: 
+- Contact me at tasneem.mselim@gmail.com 
 
 ---
 
