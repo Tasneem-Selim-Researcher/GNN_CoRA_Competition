@@ -25,9 +25,12 @@ print(f"Accuracy for {team_name}: {acc*100:.2f}%")
 
 # Update single leaderboard CSV
 leaderboard_file = "final_leaderboard.csv"
+current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 new_entry = {
     'Team': team_name,
-    'Accuracy': acc*100
+    'Accuracy': acc*100,
+    'Datetime': current_datetime  # NEW
 }
 
 # Read existing leaderboard or create new
