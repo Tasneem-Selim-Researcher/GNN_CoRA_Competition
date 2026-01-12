@@ -8,7 +8,7 @@ The competition follows **standard academic evaluation protocols** used in bench
 
 ## 🏆 Leaderboard
 
-Click here to view the live leaderboard:  
+View the live leaderboard:  
 👉 **[Leaderboard](https://tasneem-selim-researcher.github.io/GNN_CoRA_Competition/leaderboard/leaderboard.html)**
 
 ---
