@@ -61,19 +61,6 @@ The dataset is derived from the **Cora citation network**.
 
 ---
 
-## 📁 Provided Files
-
-```
-data/
-├── train_val_labeled.csv      # Node features + labels for training & validation
-├── test_features_only.csv     # Node features for test nodes (labels hidden)
-├── adjacency_matrix.csv       # Graph adjacency matrix
-
-starter_code/
-├── gcn_starter.py  (or .ipynb)
-├── requirements.txt
-```
-
 
 ### Public Files:
 the dataset is hosted externally on **Google Drive**.
