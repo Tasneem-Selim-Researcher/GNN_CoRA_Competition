@@ -214,12 +214,6 @@ Participants are encouraged to improve upon this baseline using:
 
 ---
 
-## 🎓 Academic Integrity
-
-This competition is intended for **educational and research purposes**.
-
----
-
 ## 📚 References
 
 * Kipf, T. N., & Welling, M. (2017). *Semi-Supervised Classification with Graph Convolutional Networks*. ICLR.
