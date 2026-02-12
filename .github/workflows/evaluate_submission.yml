@@ -16,8 +16,8 @@ jobs:
 
     steps:
       # 1️⃣ Debug trigger
-      - name: Debug
-        run: echo "Triggered for PR #${{ github.event.pull_request.number }}"
+      - name: Debug 
+        run: echo Triggered for PR ${{ github.event.pull_request.number }}
 
       # 2️⃣ Checkout PR branch (submission file)
       - name: Checkout PR branch
