@@ -8,7 +8,7 @@ The competition follows **standard academic evaluation protocols** used in bench
 
 ## 🏆 Leaderboard
 - Leaderboard scores are automatically updated based on accuracy.
-View the live leaderboard:  
+- View the live leaderboard:  
 👉 **[Leaderboard](https://tasneem-selim-researcher.github.io/GNN_CoRA/leaderboard.html)**
 
 ---
