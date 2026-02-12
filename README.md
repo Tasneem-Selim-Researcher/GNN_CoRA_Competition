@@ -75,21 +75,6 @@ the dataset is hosted externally on **Google Drive**.
 ### Private Files:
 - Test_label → Hidden ground-truth data used for automatic evaluation  
 
----
-
-## 🚀 Getting Started
-
-### Run the Starter Code
-
-```bash
-python gcn_starter.py
-```
-
-This will:
-
-* Load the dataset
-* Train a baseline GCN model
-* Generate a `submission.csv` file
 
 ---
 ## 📝 How to Submit Your Results
