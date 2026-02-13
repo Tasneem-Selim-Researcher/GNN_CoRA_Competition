@@ -13,7 +13,15 @@ submission_csv = sys.argv[1]   # e.g., submission/team3.csv
 labels_csv = sys.argv[2]       # e.g., private_data/test_labels.csv
 
 # Extract team name from CSV filename
-team_name = os.path.splitext(os.path.basename(submission_csv))[0]
+# team_name = os.path.splitext(os.path.basename(submission_csv))[0]
+# Get GitHub username from workflow environment
+github_user = os.environ.get("GITHUB_ACTOR")
+
+if github_user is None:
+    print("Error: GITHUB_ACTOR not found.")
+    sys.exit(1)
+
+team_name = github_user
 
 # Load CSVs
 submission = pd.read_csv(submission_csv)
