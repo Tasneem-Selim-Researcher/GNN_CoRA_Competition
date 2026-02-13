@@ -74,6 +74,5 @@ jobs:
           git add final_leaderboard.csv
           git diff --cached --quiet || git commit -m "Update leaderboard from PR #${{ github.event.pull_request.number }}"
 
-          # 🔥 IMPORTANT FIX
           git pull origin main --rebase
           git push origin main
