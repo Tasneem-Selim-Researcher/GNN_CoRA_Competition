@@ -6,9 +6,7 @@ This repository hosts the **Cora Node Classification Challenge**, a graph machin
 
 ### Difficulty Level
 
-To increase the difficulty level and encourage robust model design, controlled Gaussian noise has been added to the dataset.
-
-The provided dataset is NOT identical to the original Cora benchmark, so participants must work with the provided files as replacing the data with the original Cora dataset is not allowed
+To increase difficulty and encourage robust model design, **controlled Gaussian noise has been added to the dataset**. The provided files **differ** from the original Cora benchmark and must be used as-is; replacing them with the original dataset is not permitted.
 
 ## 🏆 Leaderboard
 - Leaderboard scores are automatically updated based on accuracy.
