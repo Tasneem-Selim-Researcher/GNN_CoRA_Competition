@@ -119,11 +119,11 @@ id,target
 Both files are required for submission. Do not submit the original CSV.
 
 
-#### Step 6: Place Encrypted Files in Submission Folder
+### Step 6: Place Encrypted Files in Submission Folder
 
 Upload these files to the submission folder in your forked repo
 
-#### Step 7: Create a Pull Request
+### Step 7: Create a Pull Request
 
 ✅ Your submission will be reviewed and evaluated, and the results will be added to the leaderboard.
 
