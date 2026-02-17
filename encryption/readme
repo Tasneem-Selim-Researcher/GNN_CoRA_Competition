@@ -2,3 +2,6 @@
 
 pip install cryptography
 python encryption/encrypt_submission.py submission.csv encryption/public_key.pem submission.enc
+
+They submit:
+submission/team_name.enc
