@@ -102,23 +102,19 @@ id,target
 
 Make sure you have:
 
-encrypt_submission.py
+1- `encrypt_submission.py`
+2- `public_key.pem`
+3- `Your CSV file submission.csv`
 
-public_key.pem
+Open CMD/terminal in the folder containing these files and Run the command:
 
-Your CSV file submission.csv
-
-Open CMD/terminal in the folder containing these files.
-
-Run the command:
-
-python encrypt_submission.py submission.csv submission.enc public_key.pem
+`python encrypt_submission.py submission.csv submission.enc public_key.pem`
 
 This will generate two files:
 
-YourName.enc → the encrypted submission
+`submission.enc → the encrypted submission`
 
-YourName.enc.key → encryption key
+`submission.enc.key → encryption key`
 
 Both files are required for submission. Do not submit the original CSV.
 
