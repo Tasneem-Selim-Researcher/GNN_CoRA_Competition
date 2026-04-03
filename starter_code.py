@@ -1,144 +1,148 @@
+import os, random
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from tensorflow.keras import layers, Model, optimizers, callbacks
-from sklearn.metrics import f1_score, accuracy_score
 
-print("--- Step 1: Loading Data from CSV Files ---")
+DATA_DIR = "" 
+TEST_SUBMISSION_PATH = ""  # predictions file
 
-# 1. Load the 4 CSV files
-# Note: These files must be in the same folder as this script
-df_train_val = pd.read_csv('.../train_val_labeled.csv')
-df_adj = pd.read_csv('.../adjacency_matrix.csv', header=None).values.astype(np.float32)
-
-# --- Step 2: Reconstruct Full Feature & Label Matrices ---
-num_nodes = 2708
-
-# Determine number of features (columns starting with 'word_')
-feature_columns = [c for c in df_train_val.columns if c.startswith('word_')]
-num_features = len(feature_columns)
-
-# Initialize empty matrices
-features = np.zeros((num_nodes, num_features), dtype=np.float32)
-labels = np.zeros((num_nodes,), dtype=np.int32)
-
-# 1. Fill Train/Val data
-tv_ids = df_train_val['id'].values
-features[tv_ids] = df_train_val[feature_columns].values
-labels[tv_ids] = df_train_val['target'].values
+EDGE_PATH = os.path.join("edge_index.csv")
+X_PATH = os.path.join("x.csv")
+YTR_PATH = os.path.join("y_train.csv")
+YVA_PATH = os.path.join("y_val.csv")
+OUT_PATH ="TEST_SUBMISSION_PATH"
 
 
-print(f"Reconstructed Features: {features.shape}")
-print(f"Reconstructed Labels: {labels.shape}")
+# -----------------
+# seed = 25
+# -----------------
+SEED = 25
+os.environ["PYTHONHASHSEED"] = str(SEED)
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
 
-# --- Step 3: Normalize Adjacency Matrix ---
 
-def normalize_adj(adj):
-    adj = adj + np.eye(len(adj))
-    degree = adj.sum(axis=1, keepdims=True)
-    degree_inv_sqrt = np.power(degree, -0.5)
-    degree_inv_sqrt[np.isinf(degree_inv_sqrt)] = 0
-    adj_normalized = degree_inv_sqrt * adj * degree_inv_sqrt.T
-    return adj_normalized
+# -----------------
+# load x
+# -----------------
+X = pd.read_csv(X_PATH).to_numpy(dtype=np.float32)  # (N,F)
+N, F = X.shape
 
-adj_norm = normalize_adj(df_adj)
-print("Adjacency matrix normalized successfully!")
+# -----------------
+# load edges: source,target
+# -----------------
+e = pd.read_csv(EDGE_PATH)
+src = e["source"].to_numpy(dtype=np.int64)
+dst = e["target"].to_numpy(dtype=np.int64)
 
-# --- Step 4: Define Splits (Standard Cora) ---
-train_idx = np.array(range(140), dtype=np.int32)
-val_idx = np.array(range(140, 640), dtype=np.int32)
-num_classes = len(np.unique(labels[:640])) # Count classes based on Train+Val
+# if your edges are 1-based, uncomment:
+# src -= 1; dst -= 1
 
-# --- Step 5: Model Definition ---
+good = (src >= 0) & (src < N) & (dst >= 0) & (dst < N)
+src, dst = src[good], dst[good]
 
-def gcn_op(inputs_list):
-    feat, adj = inputs_list[0], inputs_list[1]
-    return tf.matmul(adj, feat)
+# -----------------
+# load labels: index,label
+# -----------------
+tr = pd.read_csv(YTR_PATH)
+va = pd.read_csv(YVA_PATH)
 
-inputs = layers.Input(shape=(num_nodes, num_features), name='node_features')
-adj_input = layers.Input(shape=(num_nodes, num_nodes), name='adjacency_matrix')
+tr_idx = tr["index"].to_numpy(dtype=np.int64)
+tr_y   = tr["label"].to_numpy(dtype=np.int64)
 
-# GCN Layer 1
-x = layers.Lambda(gcn_op, name='gcn1_aggregate')([inputs, adj_input])
-x = layers.Dense(64, activation='relu', name='gcn1_transform')(x)
-x = layers.Dropout(0.5, name='gcn1_dropout')(x)
+va_idx = va["index"].to_numpy(dtype=np.int64)
+va_y   = va["label"].to_numpy(dtype=np.int64)
 
-# GCN Layer 2
-x = layers.Lambda(gcn_op, name='gcn2_aggregate')([x, adj_input])
-x = layers.Dense(32, activation='relu', name='gcn2_transform')(x)
-x = layers.Dropout(0.5, name='gcn2_dropout')(x)
+C = int(max(tr_y.max(initial=0), va_y.max(initial=0))) + 1
 
-# Output Layer
-x = layers.Lambda(gcn_op, name='gcn_out_aggregate')([x, adj_input])
-outputs = layers.Dense(num_classes, activation='softmax', name='predictions')(x)
+Y = np.zeros((N, C), dtype=np.float32)
+train_mask = np.zeros((N,), dtype=np.float32)
+val_mask   = np.zeros((N,), dtype=np.float32)
 
-model = Model(inputs=[inputs, adj_input], outputs=outputs)
-model.compile(optimizer=optimizers.Adam(learning_rate=0.01),
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
+Y[tr_idx, tr_y] = 1.0
+train_mask[tr_idx] = 1.0
 
-print(f"Model built successfully! Parameters: {model.count_params():,}")
+Y[va_idx, va_y] = 1.0
+val_mask[va_idx] = 1.0
 
-# --- Step 6: Prepare Data for Keras fit() ---
+# -----------------
+# build normalized adjacency A_hat = D^-1/2 (A_undirected + I) D^-1/2
+# -----------------
+row = np.concatenate([src, dst, np.arange(N, dtype=np.int64)])
+col = np.concatenate([dst, src, np.arange(N, dtype=np.int64)])
+val = np.ones_like(row, dtype=np.float32)
 
-# Reshape data to have a batch dimension: (1, Nodes, Features)
-feat_input = features[np.newaxis, :, :]
-adj_input = adj_norm[np.newaxis, :, :]
-labels_input = labels[np.newaxis, :]
+idx = row * N + col
+order = np.argsort(idx)
+row, col, val = row[order], col[order], val[order]
+_, first = np.unique(row * N + col, return_index=True)
+val_sum = np.add.reduceat(val, first)
+row_u, col_u, val_u = row[first], col[first], val_sum
 
-# Create Masks (Sample Weights)
-num_samples = labels.shape[0]
-train_mask = np.zeros(num_samples, dtype=np.float32)
-train_mask[train_idx] = 1.0
-train_mask_input = train_mask[np.newaxis, :]
+deg = np.zeros(N, dtype=np.float32)
+np.add.at(deg, row_u, val_u)
+deg_inv_sqrt = 1.0 / np.sqrt(np.maximum(deg, 1e-12))
+norm_val = deg_inv_sqrt[row_u] * val_u * deg_inv_sqrt[col_u]
 
-val_mask = np.zeros(num_samples, dtype=np.float32)
-val_mask[val_idx] = 1.0
-val_mask_input = val_mask[np.newaxis, :]
+A_hat = tf.sparse.SparseTensor(
+    indices=np.stack([row_u, col_u], axis=1),
+    values=norm_val.astype(np.float32),
+    dense_shape=(N, N),
+)
+A_hat = tf.sparse.reorder(A_hat)
 
-# --- Step 7: Training ---
+# -----------------
+# 2-layer GCN (Keras Functional, no custom classes)
+# -----------------
+X_in = tf.keras.Input(shape=(F,), name="X")
+A_in = tf.keras.Input(shape=(None,), sparse=True, name="A_hat")
 
-print("Starting training with model.fit()...")
-history = model.fit(
-    x=[feat_input, adj_input],
-    y=labels_input,
-    sample_weight=train_mask_input,
-    validation_data=([feat_input, adj_input], labels_input, val_mask_input),
-    epochs=200,
-    batch_size=1,
-    verbose=1,
-    callbacks=[callbacks.EarlyStopping(patience=10, restore_best_weights=True)]
+def spmm(inputs):
+    h, a = inputs
+    return tf.sparse.sparse_dense_matmul(a, h)
+
+# Keras 3: give output_shape so it can infer it
+propagate = tf.keras.layers.Lambda(
+    spmm,
+    output_shape=lambda input_shapes: input_shapes[0],
+    name="propagate",
 )
 
-print("Training completed!")
+h = tf.keras.layers.Dense(16, use_bias=False)(X_in)
+h = propagate([h, A_in])
+h = tf.keras.layers.Activation("relu")(h)
+h = tf.keras.layers.Dropout(0.5, seed=SEED)(h)
 
+h = tf.keras.layers.Dense(C, use_bias=False)(h)
+# h = propagate([h, A_in])
+out = tf.keras.layers.Activation("softmax")(h)
 
-# 8. Load Test Features
-df_test_feat = pd.read_csv('.../test_features_only.csv')
-test_ids = df_test_feat['id'].values
+model = tf.keras.Model([X_in, A_in], out)
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
+    loss="categorical_crossentropy",
+    weighted_metrics=["accuracy"],
+)
 
-# 9. Update the Full Feature Matrix
-# In Transductive GCNs, we need to include the test node features in the graph
-# to perform aggregation before the final prediction step.
-features[test_ids] = df_test_feat[feature_columns].values
+model.fit(
+    x=[X, A_hat],
+    y=Y,
+    sample_weight=train_mask,
+    validation_data=([X, A_hat], Y, val_mask),
+    epochs=5,
+    batch_size=N,
+    verbose=2,
+)
 
-print(f"Added test features to graph. Total features shape: {features.shape}")
+# -----------------
+# predict + save
+# -----------------
+proba = model.predict([X, A_hat], batch_size=N, verbose=0)
+pred = proba.argmax(axis=1).astype(np.int64)
 
-# 10. Predict
-# We predict on the full graph (train + val + test) because GCN layers aggregate info
-pred = model.predict([features[np.newaxis, :, :], adj_norm[np.newaxis, :, :]])[0]
+pd.DataFrame({"index": np.arange(N, dtype=np.int64), "pred": pred}).to_csv(OUT_PATH, index=False)
+print("Saved:", OUT_PATH)
 
-# Extract predictions for the test nodes
-test_pred_indices = np.argmax(pred[test_ids], axis=1)
-
-# 11. Create Submission DataFrame
-submission = pd.DataFrame({
-    'id': test_ids,
-    'target': test_pred_indices
-})
-
-# 12. Save to CSV
-output_filename = 'submission.csv'
-submission.to_csv(output_filename, index=False)
-
-print(f"✅ Successfully saved predictions to '{output_filename}'")
+val_acc = (pred[va_idx] == va_y).mean()
+print(f"Val accuracy (post-hoc): {val_acc:.4f}")
