@@ -4,10 +4,6 @@
 
 This repository hosts the **Cora Node Classification Challenge**, a graph machine learning competition based on the **Cora citation network**. Participants are required to design and train **Graph Neural Network (GNN)** models to classify scientific papers into research topics using node features and graph structure.
 
-### Difficulty Level
-
-To increase difficulty and encourage robust model design, **controlled Gaussian noise has been added to the dataset**. The provided files **differ** from the original Cora benchmark and must be used as-is; replacing them with the original dataset is not permitted.
-
 ## 🏆 Leaderboard
 - Leaderboard scores are automatically updated based on accuracy.
 - View the live leaderboard:  
@@ -51,14 +47,13 @@ The dataset is derived from the **Cora citation network**.
 ---
 
 ### Public Files:
-the dataset is hosted externally on **Google Drive**.
+These files are available in the data/ folder for participants:
 
-### 🔗 **Download Link**
-➡️ [Click here to access the Adjacency Matrix](https://drive.google.com/file/d/17SKE86QU9bBahpdUIeFNjJqRg05QFFfx/view?usp=sharing)
+edge_index.csv — adjacency information of the graph (edges between nodes)
+x.csv — node features
+y_train.csv — labels for the training nodes
+y_val.csv — labels for validation nodes
 
-➡️ [Click here to access the Train and Validation data](https://drive.google.com/file/d/1ruYD0JdX_yGv1of_EUM9lcv0t6lmZ3tX/view?usp=sharing)
-
-➡️ [Click here to access the Test features only](https://drive.google.com/file/d/19AdwSvFBT_3n0wiQ_rwkSWBD97nwAdpt/view?usp=sharing)
 
 ### Private Files:
 - Test_label → Hidden ground-truth data used for automatic evaluation  
