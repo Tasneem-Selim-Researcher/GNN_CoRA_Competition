@@ -47,18 +47,13 @@ The dataset is derived from the **Cora citation network**.
 ---
 
 ### Public Files:
-the dataset is hosted externally on **Google Drive**.
+These files are available in the data/ folder for participants:
 
-### 🔗 **Download Link**
-➡️ [Edge index]([https://drive.google.com/file/d/17SKE86QU9bBahpdUIeFNjJqRg05QFFfx/view?usp=sharing](https://drive.google.com/file/d/1uijOh75XafoPkr7wNST1TNKWEZjItBVb/view?usp=sharing))
+edge_index.csv — adjacency information of the graph (edges between nodes)
+x.csv — node features
+y_train.csv — labels for the training nodes
+y_val.csv — labels for validation nodes
 
-➡️ [Features X]([https://drive.google.com/file/d/1ruYD0JdX_yGv1of_EUM9lcv0t6lmZ3tX/view?usp=sharing](https://drive.google.com/file/d/1BF0YU1-qEXV-1edSvjMlz9-Xc4boYu9z/view?usp=sharing))
-
-➡️ [Y_Train]([https://drive.google.com/file/d/19AdwSvFBT_3n0wiQ_rwkSWBD97nwAdpt/view?usp=sharing](https://drive.google.com/file/d/1RvTPBYCuIuvdmSeh59Qiuj4R2dAr7lso/view?usp=sharing))
-
-➡️ [Y_Val]([https://drive.google.com/file/d/19AdwSvFBT_3n0wiQ_rwkSWBD97nwAdpt/view?usp=sharing](https://drive.google.com/file/d/1RvTPBYCuIuvdmSeh59Qiuj4R2dAr7lso/view?usp=sharing](https://drive.google.com/file/d/1VsFUTq_emvYnM1GVb-nyFuFuT75Hw_h8/view?usp=sharing)))
-
-➡️ Y_test is private
 
 ### Private Files:
 - Test_label → Hidden ground-truth data used for automatic evaluation  
