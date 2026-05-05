@@ -164,9 +164,7 @@ Evaluation is performed on a **hidden test set** to prevent data leakage.
 
 ## 🏆 Baseline
 
-The provided starter code implements a **2-layer Graph Convolutional Network (GCN)** as a baseline.
-
-Participants are encouraged to improve upon this baseline using:
+Participants are encouraged to improve the provided starter code upon this baseline using:
 
 * Deeper architectures
 * Attention mechanisms
