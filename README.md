@@ -53,17 +53,18 @@ The dataset is derived from the **Cora citation network**.
 ---
 
 ### Public Files:
-These files are available in the data/ folder for participants:
 
-edge_index.csv — adjacency information of the graph (edges between nodes)
+##### These files are available in the data/ folder for participants:
 
-x.csv — node features
+1- edge_index.csv — edges between nodes
 
-y_train.csv — labels for the training nodes
+2- x.csv — node features
 
-y_val.csv — labels for validation nodes
+3- y_train.csv — labels for the training nodes
 
-test_ID _ id of testing nodes
+4- y_val.csv — labels for validation nodes
+
+5- test_ID _ id of testing nodes 
 
 
 ### Private Files:
@@ -163,9 +164,7 @@ Evaluation is performed on a **hidden test set** to prevent data leakage.
 
 ## 🏆 Baseline
 
-The provided starter code implements a **2-layer Graph Convolutional Network (GCN)** as a baseline.
-
-Participants are encouraged to improve upon this baseline using:
+Participants are encouraged to improve the provided starter code upon this baseline using:
 
 * Deeper architectures
 * Attention mechanisms
